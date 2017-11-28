@@ -10,12 +10,13 @@ from moviespider.items import MoviespiderItem
 class ExampleSpider(scrapy.Spider):
     name = 'douban'
     # sorts = ['R', 'S', 'T']
-    sorts = ['S', 'T']
+    # sorts = ['S', 'T']
+    sorts = ['R']
     start_url = 'https://movie.douban.com/j/new_search_subjects?sort={0}&range=0,10&tags=电影&start={1}'
 
     def start_requests(self):
         for sort in self.sorts:
-            for start in range(2000, 3000, 20):
+            for start in range(3000, 5000, 20):
                 url = self.start_url.format(sort, start)
                 yield Request(url, self.parse, meta={
                 })
