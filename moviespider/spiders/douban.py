@@ -61,6 +61,21 @@ class ExampleSpider(scrapy.Spider):
         item['imdb_id'] = ''.join(re.compile(r'IMDb链接:(.*)').findall(info_str)).strip()
         item['status'] = '0'
 
+        # 获取热门评论
+        comments_wrapper = response.xpath('//*[@id="hot-comments"]/div/div')
+        comments = []
+        for comment_wrapper in comments_wrapper:
+            rate_str = comment_wrapper.xpath('descendant-or-self::h3/span[2]/span[contains(@class,"rating")]/@class').extract_first()
+            comment = {
+                'author': comment_wrapper.xpath('descendant-or-self::h3/span[2]/a/text()').extract_first().strip(),
+                'author_profile': comment_wrapper.xpath('descendant-or-self::h3/span[2]/a/@href').extract_first().strip(),
+                'rate': ''.join(re.findall(r'allstar(\d+) rating', rate_str)),
+                'content': comment_wrapper.xpath('descendant-or-self::p/text()').extract_first().strip(),
+                'created_at': comment_wrapper.xpath('descendant-or-self::h3/span[2]/span[contains(@class,"comment-time")]/text()').extract_first().strip()
+            }
+            self.log(comments, level=logging.DEBUG)
+            comments.append(comment)
+        item['comments'] = comments
         detail = response.xpath('//*[@id="link-report"]').extract_first()
         try:
             item['imdb_link'] = re.compile('<a href="(.*?)".*?>.*?' + item['imdb_id']).findall(info)[0]

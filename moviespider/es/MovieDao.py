@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import logging
-from elasticsearch_dsl import DocType, String, Object, InnerObjectWrapper
+from elasticsearch_dsl import DocType, String, Object, Nested, InnerObjectWrapper
 # from elasticsearch_dsl.field import Long
 # from elasticsearch.helpers import scan
 # from elasticsearch_dsl.connections import connections
@@ -9,6 +9,13 @@ from elasticsearch_dsl import DocType, String, Object, InnerObjectWrapper
 
 logger = logging.getLogger("MovieDao")
 
+
+class Comment(InnerObjectWrapper):
+    author = String()
+    author_profile = String()
+    rate = String()
+    content = String()
+    created_at = String()
 
 class MovieDocType(DocType):
     """
@@ -33,25 +40,19 @@ class MovieDocType(DocType):
     alias = String()
     imdb_id = String()
     imdb_link = String()
-
-    # region = Object(doc_class=Region)  # 区域
+    comments = Nested(doc_class=Comment)
 
     class Meta:
         index = 'doubanfilm'
         #index = 'purchase_policy_pool_parsed'
         doc_type = 'movie1'
 
-    # def set_region(self, **region):
-    #     """
-    #     设置所在位置
-    #     :param region:
-    #     """
-    #     self.region["district"] = region["district"]
-    #     self.region["province"] = region["province"]
-    #     self.region["city"] = region["city"]
+    def add_comments(self, commentItems):
+        for item in commentItems:
+          self.comments.append(item)
 
 
-exclude_keys = ["id"]
+exclude_keys = ["id", "comments"]
 
 
 class MovieDao:
@@ -62,6 +63,7 @@ class MovieDao:
     def save(origin_item):
         item = {k: origin_item[k] for k in origin_item if k not in exclude_keys}
         doc = MovieDocType(**item)
+        doc.add_comments(origin_item['comments'])
         try:
             doc.meta.id = origin_item["id"]
             doc.save()

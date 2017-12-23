@@ -31,3 +31,5 @@ class MoviespiderItem(scrapy.Item):
     alias = Field()
     imdb_id = Field()
     imdb_link = Field()
+    comments = Field()
+    
