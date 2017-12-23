@@ -11,6 +11,7 @@ from scrapy import Field
 
 class MoviespiderItem(scrapy.Item):
     # define the fields for your item here like:
+    id = Field()
     movie_id = Field()
     directors = Field()
     origin = Field()

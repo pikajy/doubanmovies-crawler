@@ -3,6 +3,7 @@ import scrapy
 import logging
 import json
 import re
+import hashlib
 from scrapy import Request
 from moviespider.items import MoviespiderItem
 
@@ -10,13 +11,13 @@ from moviespider.items import MoviespiderItem
 class ExampleSpider(scrapy.Spider):
     name = 'douban'
     # sorts = ['R', 'S', 'T']
-    # sorts = ['S', 'T']
     sorts = ['R']
     start_url = 'https://movie.douban.com/j/new_search_subjects?sort={0}&range=0,10&tags=电影&start={1}'
 
     def start_requests(self):
         for sort in self.sorts:
-            for start in range(3000, 5000, 20):
+            for start in range(0, 20, 20):
+            # for start in range(660, 9980, 20):
                 url = self.start_url.format(sort, start)
                 yield Request(url, self.parse, meta={
                 })
@@ -40,6 +41,7 @@ class ExampleSpider(scrapy.Spider):
         # self.log(info_str, level=logging.INFO)
         # print (data['directors'],'====','／'.join(data['directors']))
         item = MoviespiderItem()
+        item['id'] = hashlib.md5(response.url.encode()).hexdigest()
         item['directors'] = '／'.join(data['directors'])
         item['rate'] = data['rate']
         item['title'] = data['title']
@@ -57,6 +59,7 @@ class ExampleSpider(scrapy.Spider):
         item['duration'] = ''.join(re.compile(r'片长:(.*)').findall(info_str)).strip()
         item['alias'] = ''.join(re.compile(r'又名:(.*)').findall(info_str)).strip()
         item['imdb_id'] = ''.join(re.compile(r'IMDb链接:(.*)').findall(info_str)).strip()
+        item['status'] = '0'
 
         detail = response.xpath('//*[@id="link-report"]').extract_first()
         try:
