@@ -26,7 +26,7 @@ class ExampleSpider(scrapy.Spider):
         self.log(response.url, level=logging.INFO)
         for data in json.loads(response.text)['data']:
             detail_url = data['url']
-            # self.log(detail_url, level=logging.INFO)
+            self.log(detail_url, level=logging.INFO)
             yield Request(detail_url, self.parse_detail, meta={
                 'list_data': data
             })
