@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # Scrapy settings for moviespider project
 #
 # For simplicity, this file contains only settings considered important or
@@ -16,7 +14,7 @@ NEWSPIDER_MODULE = 'moviespider.spiders'
 
 RANDOMIZE_DOWNLOAD_DELAY = True
 
-DOWNLOAD_DELAY = 8
+DOWNLOAD_DELAY = 10
 LOG_LEVEL = "INFO"
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 # USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.20 (KHTML, like Gecko) Chrome/19.0.1036.7 Safari/535.20'

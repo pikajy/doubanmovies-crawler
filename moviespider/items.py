@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 # Define here the models for your scraped items
 #
@@ -32,4 +31,3 @@ class MoviespiderItem(scrapy.Item):
     imdb_id = Field()
     imdb_link = Field()
     comments = Field()
-    

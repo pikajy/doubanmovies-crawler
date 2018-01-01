@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 import logging
 from elasticsearch_dsl import DocType, String, Object, Nested, InnerObjectWrapper
@@ -25,7 +24,7 @@ class MovieDocType(DocType):
     directors = String()
     origin = String()
     title = String()
-    category = String()
+    category = String(index='not_analyzed')
     link = String()
     cover = String()
     rate = String()
@@ -34,7 +33,7 @@ class MovieDocType(DocType):
     detail = String()
     screenwriter = String()
     language = String()
-    contury = String()
+    contury = String(index='not_analyzed')
     onview_date = String()
     duration = String()
     alias = String()
@@ -43,9 +42,9 @@ class MovieDocType(DocType):
     comments = Nested(doc_class=Comment)
 
     class Meta:
-        index = 'doubanfilm'
+        index = 'doubanfilm_v2'
         #index = 'purchase_policy_pool_parsed'
-        doc_type = 'movie1'
+        doc_type = 'movie'
 
     def add_comments(self, commentItems):
         for item in commentItems:

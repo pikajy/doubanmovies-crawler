@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import scrapy
 import logging
 import json
@@ -16,8 +15,7 @@ class ExampleSpider(scrapy.Spider):
 
     def start_requests(self):
         for sort in self.sorts:
-            for start in range(0, 500, 20):
-            # for start in range(660, 9980, 20):
+            for start in range(0, 9980, 20):
                 url = self.start_url.format(sort, start)
                 yield Request(url, self.parse, meta={
                 })
@@ -26,7 +24,7 @@ class ExampleSpider(scrapy.Spider):
         self.log(response.url, level=logging.INFO)
         for data in json.loads(response.text)['data']:
             detail_url = data['url']
-            # self.log(detail_url, level=logging.INFO)
+            self.log(detail_url, level=logging.INFO)
             yield Request(detail_url, self.parse_detail, meta={
                 'list_data': data
             })
@@ -54,7 +52,6 @@ class ExampleSpider(scrapy.Spider):
         item['category'] = ''.join(re.compile(r'类型:(.*)').findall(info_str)).strip()
         item['contury'] = ''.join(re.compile(r'制片国家/地区:(.*)').findall(info_str)).strip()
         item['language'] = ''.join(re.compile(r'语言:(.*)').findall(info_str)).strip()
-        item['screenwriter'] = ''.join(re.compile(r'类型:(.*)').findall(info_str)).strip()
         item['onview_date'] = ''.join(re.compile(r'上映日期:(.*)').findall(info_str)).strip()
         item['duration'] = ''.join(re.compile(r'片长:(.*)').findall(info_str)).strip()
         item['alias'] = ''.join(re.compile(r'又名:(.*)').findall(info_str)).strip()

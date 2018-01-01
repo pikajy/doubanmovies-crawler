@@ -1,12 +1,10 @@
-# -*- coding: utf-8 -*-
-
 # 导出模块
 # from .SpiderWebItemDao import YTDSpiderWebItemDao
-
+import logging
 # 配置 es 连接的全局配置
 from elasticsearch_dsl.connections import connections
-
-print("es 连接的全局配置")
+log = logging.getLogger('es')
+log.info('es 连接的全局配置')
 connections.create_connection(hosts="http://115.28.224.78:9200", timeout=20)
 
 # 可以通过别名配置多个 ES
