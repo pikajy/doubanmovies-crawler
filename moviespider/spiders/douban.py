@@ -15,7 +15,7 @@ class ExampleSpider(scrapy.Spider):
 
     def start_requests(self):
         for sort in self.sorts:
-            for start in range(0, 9980, 20):
+            for start in range(0, 80, 20):
                 url = self.start_url.format(sort, start)
                 yield Request(url, self.parse, meta={
                 })
