@@ -5,7 +5,7 @@
 # http://doc.scrapy.org/en/latest/topics/spider-middleware.html
 import random
 import logging
-
+import string
 from scrapy import signals
 from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
 
@@ -78,4 +78,6 @@ class DoubanUserAgent(UserAgentMiddleware):
         # logger.info(agent)
         if agent:
             request.headers.setdefault('User-Agent', agent)
+            # request.headers.setdefault('Cookie', None)
+            request.headers.setdefault("Cookie","bid=%s" % "".join(random.sample(string.ascii_letters + string.digits, 11)))
 

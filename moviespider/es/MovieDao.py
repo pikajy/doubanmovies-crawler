@@ -44,7 +44,7 @@ class MovieDocType(DocType):
     comments = Nested(doc_class=Comment)
 
     class Meta:
-        index = 'doubanfilm_v2'
+        index = 'doubanfilm'
         #index = 'purchase_policy_pool_parsed'
         doc_type = 'movie'
 
